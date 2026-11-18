@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.scrimet</groupId>
-    <artifactId>Sistema-Enquetes</artifactId>
+    <artifactId>polls</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Sistema-Enquetes</name>
-    <description>Sistema-Enquetes</description>
+    <name>polls</name>
+    <description>polls</description>
     <url/>
     <licenses>
         <license/>
