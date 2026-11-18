@@ -18,7 +18,8 @@ A Spring Boot REST API for creating polls, collecting votes, and tracking result
 - Java 25
 - Spring Boot 4.2.0-M2
 - Spring MVC, Spring Data JPA, and Jakarta Bean Validation
-- H2 database for local development
+- MySQL 8.4
+- Docker Compose
 - Maven Wrapper
 
 ## 🚀 Getting started
@@ -26,23 +27,30 @@ A Spring Boot REST API for creating polls, collecting votes, and tracking result
 ### Requirements
 
 - JDK 25
+- Docker Desktop with Docker Compose
 - No separate Maven installation is needed; use the included wrapper.
 
-### Run the application
+### Run the application with Docker
 
-On Windows PowerShell:
+Copy the example environment file, then build and start the API and MySQL:
 
 ```powershell
-.\mvnw.cmd spring-boot:run
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+docker compose up --build -d
 ```
 
 On macOS or Linux:
 
 ```bash
-./mvnw spring-boot:run
+test -f .env || cp .env.example .env
+docker compose up --build -d
 ```
 
-The API is available at `http://localhost:8080`. The default H2 database is in memory, so its data is reset when the application restarts.
+The API is available at `http://localhost:8080`. MySQL is exposed on host port `3308` by default (change `MYSQL_PORT` in `.env` if needed), and its data is persisted in the `mysql-data` Docker volume. The credentials in `.env.example` are for local development only; change them before exposing the services to other users or networks.
+
+To run the application directly with Maven instead, start MySQL with `docker compose up -d mysql`, then run `.\mvnw.cmd spring-boot:run` on Windows or `./mvnw spring-boot:run` on macOS/Linux.
+
+Stop the application and database with `docker compose down`.
 
 ## 🗺️ API
 
@@ -224,13 +232,15 @@ The database enforces a unique `(poll_id, user_id)` pair in `votes`, preventing 
 
 ## 🧪 Tests
 
-Run the complete test suite:
+The integration tests exercise the HTTP endpoints against a disposable MySQL test service. Start it, run the full JUnit suite, and stop the test service:
 
 ```powershell
+docker compose --profile test up -d --wait mysql-test
 .\mvnw.cmd test
+docker compose --profile test stop mysql-test
 ```
 
-The tests cover poll creation, voting rules, result ranking, and the HTTP voting flow.
+On macOS or Linux, replace `.\mvnw.cmd` with `./mvnw`. The suite covers user creation, poll creation/listing/details, voting and duplicate-vote rules, JSON results and ranking, the SSE route, finishing/cancelling polls, and deletion. It also includes focused service tests.
 
 ## ⚠️ Identity and security note
 
