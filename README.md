@@ -21,6 +21,9 @@ A Spring Boot REST API for creating polls, collecting votes, and tracking result
 - MySQL 8.4
 - Docker Compose
 - Maven Wrapper
+- React 19 and React Router
+- Tailwind CSS 4
+- Vite
 
 ## 🚀 Getting started
 
