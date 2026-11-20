@@ -5,6 +5,8 @@ A Spring Boot REST API for creating polls, collecting votes, and tracking result
 ## ✨ Features
 
 - Create users and polls with multiple options.
+- Register users and authenticate through email and password.
+- Use the React frontend for login, registration, profiles, poll creation, voting, and results.
 - Start every new poll in the `OPEN` state.
 - Finish polls manually or automatically when `finishDate` is reached.
 - Allow one vote per user for each poll.
@@ -30,6 +32,7 @@ A Spring Boot REST API for creating polls, collecting votes, and tracking result
 ### Requirements
 
 - JDK 25
+- Node.js 20 or newer
 - Docker Desktop with Docker Compose
 - No separate Maven installation is needed; use the included wrapper.
 
@@ -55,6 +58,45 @@ To run the application directly with Maven instead, start MySQL with `docker com
 
 Stop the application and database with `docker compose down`.
 
+### Run the React frontend
+
+In a second terminal, install the frontend dependencies and start Vite:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend is available at `http://localhost:5173`. It expects the API at `http://localhost:8080` by default.
+
+To use a different API address, copy the example environment file before starting Vite:
+
+```powershell
+cd frontend
+Copy-Item .env.example .env
+```
+
+Then set `VITE_API_URL` in `frontend/.env` if necessary.
+
+### Run everything locally
+
+From the repository root, start MySQL and the API with Docker:
+
+```powershell
+docker compose up --build -d
+```
+
+In another terminal, start the React frontend:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173` in the browser. Use `docker compose logs -f app` to view the API logs and `docker compose down` to stop the Docker services.
+
 ## 🗺️ API
 
 The examples below use `http://localhost:8080` as the base URL. Dates use ISO local date-time format (`yyyy-MM-dd'T'HH:mm:ss`) and do not include a timezone.
@@ -71,7 +113,22 @@ Content-Type: application/json
 ```json
 {
   "name": "Alex Morgan",
-  "email": "alex@example.com"
+  "email": "alex@example.com",
+  "password": "secret123"
+}
+```
+
+#### Login
+
+```http
+POST /users/login
+Content-Type: application/json
+```
+
+```json
+{
+  "email": "alex@example.com",
+  "password": "secret123"
 }
 ```
 
