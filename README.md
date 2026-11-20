@@ -81,13 +81,17 @@ Then set `VITE_API_URL` in `frontend/.env` if necessary.
 
 ### Run everything locally
 
-From the repository root, start MySQL and the API with Docker:
+Open two terminals in the repository root.
+
+#### Terminal 1 — start the API and MySQL
 
 ```powershell
 docker compose up --build -d
 ```
 
-In another terminal, start the React frontend:
+Wait until MySQL and the API are running. The API will be available at `http://localhost:8080`.
+
+#### Terminal 2 — start the React frontend
 
 ```powershell
 cd frontend
@@ -95,7 +99,17 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173` in the browser. Use `docker compose logs -f app` to view the API logs and `docker compose down` to stop the Docker services.
+Open `http://localhost:5173` in the browser.
+
+Useful commands:
+
+```powershell
+docker compose logs -f app
+docker compose ps
+docker compose down
+```
+
+Use `docker compose logs -f app` to follow the API logs, `docker compose ps` to check the services, and `docker compose down` to stop MySQL and the API.
 
 ## 🗺️ API
 
