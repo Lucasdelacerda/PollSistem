@@ -5,7 +5,7 @@ A Spring Boot REST API for creating polls, collecting votes, and tracking result
 ## ✨ Features
 
 - Create users and polls with multiple options.
-- Register users and authenticate through email and password.
+- Register users with BCrypt-hashed passwords and check credentials through a login endpoint (demonstration only; no authenticated session or token is issued).
 - Use the React frontend for login, registration, profiles, poll creation, voting, and results.
 - Start every new poll in the `OPEN` state.
 - Finish polls manually or automatically when `finishDate` is reached.
@@ -318,7 +318,9 @@ On macOS or Linux, replace `.\mvnw.cmd` with `./mvnw`. The suite covers user cre
 
 ## ⚠️ Identity and security note
 
-This project currently accepts `userId` from request parameters or request bodies and does not authenticate users. That makes it suitable for local development and demonstrations, but clients can claim another user's ID. Add authentication and derive the user ID from the authenticated principal before using this API in production.
+This is a learning project. It includes a registration endpoint that stores BCrypt-hashed passwords and a login endpoint that checks email and password, but login does not create an authenticated server-side session or issue a token. The frontend only keeps the returned user profile in browser storage, which is not proof of identity.
+
+Poll and vote endpoints still accept `userId` directly in query parameters or request bodies. A client can therefore claim another user's ID, so the current identity checks are not secure authentication or authorization. The next step is to add Spring Security and a proper authentication flow, such as JWT, then obtain the user ID from the authenticated principal instead of trusting client-supplied IDs. Do not use this implementation as-is in production.
 
 ## 📁 Project structure
 
