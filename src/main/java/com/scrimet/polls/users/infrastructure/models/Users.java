@@ -29,6 +29,9 @@ public class Users {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false, name = "password_hash")
+    private String passwordHash;
+
     @OneToMany(mappedBy = "users")
     private List<Poll> polls = new ArrayList<>();
 

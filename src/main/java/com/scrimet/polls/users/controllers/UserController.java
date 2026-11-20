@@ -1,6 +1,7 @@
 package com.scrimet.polls.users.controllers;
 
 import com.scrimet.polls.users.dtos.CreateUserDTO;
+import com.scrimet.polls.users.dtos.LoginDTO;
 import com.scrimet.polls.users.dtos.UserDTO;
 import com.scrimet.polls.users.services.UserService;
 import jakarta.validation.Valid;
@@ -22,5 +23,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@Valid @RequestBody CreateUserDTO dto) {
         return userService.createUser(dto);
+    }
+
+    @PostMapping("/login")
+    public UserDTO login(@Valid @RequestBody LoginDTO dto) {
+        return userService.login(dto);
     }
 }

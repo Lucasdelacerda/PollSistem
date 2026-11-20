@@ -49,7 +49,7 @@ class PollFlowIntegrationTest {
     @Test
     void createsUsersAndValidatesUserRequests() throws Exception {
         String email = uniqueEmail();
-        String requestBody = objectMapper.writeValueAsString(Map.of("name", "Voter", "email", email));
+        String requestBody = objectMapper.writeValueAsString(Map.of("name", "Voter", "email", email, "password", "secret123"));
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +65,12 @@ class PollFlowIntegrationTest {
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(Map.of("name", "Invalid", "email", "not-an-email"))))
+                        .content(objectMapper.writeValueAsString(Map.of("name", "Invalid", "email", "not-an-email", "password", "secret123"))))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of("name", "Invalid", "email", "user@example.org", "password", "secret123"))))
                 .andExpect(status().isBadRequest());
     }
 
@@ -225,7 +230,7 @@ class PollFlowIntegrationTest {
     private long createUser(String name) throws Exception {
         MvcResult result = mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(Map.of("name", name, "email", uniqueEmail()))))
+                        .content(objectMapper.writeValueAsString(Map.of("name", name, "email", uniqueEmail(), "password", "secret123"))))
                 .andExpect(status().isCreated())
                 .andReturn();
         return objectMapper.readTree(result.getResponse().getContentAsString()).get("id").asLong();
