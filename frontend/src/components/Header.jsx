@@ -17,8 +17,9 @@ export function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-violet-100 bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="text-xl font-bold tracking-tight text-violet-700">
-          Enquete
+        <Link to="/" className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-violet-700">
+          <img src="/polls-logo.svg" alt="" className="size-9 shrink-0" />
+          Enquetes
         </Link>
 
         <div className="relative">
